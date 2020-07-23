@@ -1,6 +1,5 @@
-== Preamble ==
-
-<pre>SEP: 0030
+<pre>
+SEP: 0030
 Title: Recoverysigner: multi-party key management of Stellar accounts
 Author: Leigh McCulloch &lt;@leighmcculloch&gt;, Lindsay Lin &lt;@capybaraz&gt;
 Track: Standard
@@ -8,7 +7,9 @@ Status: Draft
 Discussion: https://groups.google.com/forum/#!topic/stellar-dev/SFr2dHBZlsY
 Created: 2019-12-20
 Updated: 2020-06-30
-Version: 0.5.0</pre>
+Version: 0.5.0
+</pre>
+
 == Summary ==
 
 This protocol defines an API that enables an individual (e.g., a user or wallet) to regain access to a Stellar account that it owns after the individual has lost its private key without providing any third party control of the account. Using this protocol, the user or wallet will preregister the account and a phone number or email with two or more servers implementing the protocol and add those servers as signers of the account. No individual server will have control of the account, but collectively, they may help the individual recover access to the account. The protocol also enables individuals to pass control of a Stellar account to another individual.
