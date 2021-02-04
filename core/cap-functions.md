@@ -46,8 +46,15 @@ solutions.
 
 ## Abstract
 
-The proposal adds new control structure operations `BeginIfOp`, `EndIfOp`,
-`BeginWhileOp`, and `EndWhileOp`.
+The proposal adds a fixed number of registers to the transient state of the
+transaction application process that may be set and read by new operations.
+
+The proposal adds new operation `JumpIfOp` for skipping or repeating
+operations.
+
+The proposal adds new operation `SetRegisterOp` for setting a register with a
+literal value, or a referenced value from a register, the current
+transaction, or current ledger.
 
 The proposal adds new operation `SetRegisterOp` for executing an expression
 supporting arithmetic, storing the result as transient state.
@@ -92,9 +99,40 @@ This patch of XDR changes is based on the XDR files in tag/commit `v15.1.0` (`90
 
 ### Semantics
 
-#### If Condition Operations (`BeginIfOp`, `EndIfOp`)
+#### Registers
+
+During execution of a transaction's operations a set of 16 64-bit registers
+are available for setting.
+
+#### Jump Operation (`JumpOp`)
+
+The `BeginIfOp` and `EndIfOp` operations wrap a set of operations and cause
+them only to be applied if the expression tree defined in `BeginIfOp`
+resolves to true. All operations in the set are still validated regardless of
+whether they are applied.
+
+Each leaf in the expression tree is a right-hand operand, a left-hand side
+operand, and an operator. An operand may be a literal value, may reference a
+register, may reference a transaction field, or may reference a ledger entry
+field in the current ledger. An operator may be a `==`, `!=`, `>`, `<`, `>=`,
+`<=`, `contains`, or `notcontains`.
+
+TODO: How are ledger entry and transaction fields referenced.
+TODO: How are ledger entry and transaction fields that are arrays indexed.
+
 #### While Loop Operations (`BeginWhileOp`, `EndWhileOp`)
+
+The `BeginWhileOp` and `EndWhileOp` operations wrap a set of operations and
+cause them to be applied repeatedly while the expression tree defined in
+`BeginWhileOp` resolves to true. All operations in the set are still
+validated regardless of whether they are applied.
+
+The expression tree functions the same as `BeginIfOp`.
+
 #### Set Register Operation (`SetRegisterOp`)
+
+The `SetRegisterOp` operation sets one of 16 64-bit registers.
+
 #### Set Parameter Operation (`SetParameterOp`)
 #### Function (`Function`)
 #### Function Ledger Entry (`FunctionEntry`)
@@ -110,11 +148,24 @@ by the number of operations in the function.
 #### Execute Function Operation (`ExecuteFunctionOp`)
 
 The `ExecuteFunctionOp` is assessed for fees as if the operation is replaced
-by the number of operations in the function.
+by the greater of, the number of operations executed by the function, or the
+number of operations in the function.
 
 #### Delete Function Operation (`DeleteFunctionOp`)
 
 ## Design Rationale
+
+### Fees
+
+Fees for `CreateFunctionOp` are based on the number of operations in the
+function because the size of functions may be wildly different and a single
+base fee for the operation is not equivalent to the effort required to
+validate the function is valid.
+
+Fees for `ExecuteFunctionOp` are based on the greater of operations executed
+to account for while loops, or the number of operations in the function, to
+account for the overhead of iterating over large functions that apply only a
+small number of operations.
 
 ### Exclusion of a Scripting Language
 
@@ -141,6 +192,19 @@ submitted to each ledger because a function may contain many operations,
 making it trivial to submit transactions that execute many functions. The fee
 structure proposed ensures that fees paid are proportional to the additional
 operations.
+
+## Unknowns Requiring Further Research
+
+- This proposal may change when signature verification of a transaction must
+occur. If a fork in a function or logical program executed by a transaction
+includes operations that do not have a signature authorizing, but that fork
+is not executed, the validator must know to skip the requirement for it to be
+authorized.
+
+## Known Limitations
+- This proposal makes defining expressions arduous, especially referencing
+ledger entries, reading and copying values. This would be addressed by a
+scripting language built atop.
 
 ## Test Cases
 
