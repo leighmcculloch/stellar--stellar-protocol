@@ -27,7 +27,15 @@ TODO.
 
 ## Motivation
 
-TODO.
+The Stellar network provides first-class support for many high-level features
+such as trading, path payments, and two-part payments (claimable balances),
+which in many financial applications removes the need for smart contracts.
+However, a lack of smart contracts slows innovation. Experimental ideas must
+be developed outside the chain, or if it is to occur on chain, significant
+effort is required to validate new first-class functionality, implement and
+test it. Adding support for logical programs creates space for
+experimentation on chain. Successful and widely used experiments can still be
+adopted as first-class features.
 
 ### Goals Alignment
 This CAP is aligned with the following Stellar Network Goals:
