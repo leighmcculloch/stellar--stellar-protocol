@@ -40,7 +40,9 @@ adopted as first-class features.
 ### Goals Alignment
 This CAP is aligned with the following Stellar Network Goals:
 
-TODO.
+- The Stellar Network should support participants innovating on liquidity
+solutions.
+- The Stellar Network should support participants developing new use cases.
 
 ## Abstract
 
