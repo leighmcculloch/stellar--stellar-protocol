@@ -34,19 +34,17 @@ TODO.
 
 ## Abstract
 
-The proposal adds new operations that provide control structures that define at apply time which operations in a transaction are applied, how many times they are applied, and perform arithmetic.
+The proposal adds new control structure operations `BeginIfOp`, `EndIfOp`, `BeginWhileOp`, and `EndWhileOp`.
 
-The proposal adds a new ledger entry, `FunctionEntry`, that stores a `Function`. A `Function` is a list of `Operation`s, input parameters, and output parameters. The proposal adds new operations `CreateFunctionOp`, `ExecuteFunctionOp`, `DeleteFunctionOp`. Functions are referenced by their hash. The operations within a function may operate on a parameterized source account, or on a literal source account.
+The proposal adds new operation `SetRegisterOp` for executing an expression supporting arithmetic, storing the result as transient state.
 
-The proposal defines a new transaction envelope that extends the existing transaction envelope to include a list of `Function`s that may be referenced by operations in the transaction.
+The proposal adds new operation `SetParameterOp` that stores a value, literal or otherwise, in a field of the next operation.
 
-The proposal defines a new signer key type `SIGNER_KEY_TYPE_FUNCTION` for accounts that references a specific function is authorized.
+Transactions can be built containing logical programs by including the control structure, register, and parameter operations directly inside the operation list of a transaction.
 
-Transactions can be built containing logical programs by using including the control structure and arithmetic operations directly inside the operation list of a transaction.
+The proposal adds a new type `Function`. A `Function` is a list of `Operation`s, input parameters, and output parameters, identified and referenced by their hash. The proposal adds a new ledger entry, `FunctionEntry`, that stores a `Function`. The proposal adds new operations `CreateFunctionOp`, `ExecuteFunctionOp`, and `DeleteFunctionOp`.
 
-Transactions can be built containing functions. Transactions containing functions may execute them, or store them in the ledger for later execution.
-
-Transactions can be built referencing functions stored in the ledger. Transactions referencing functions may execute them, or delete them.
+The proposal defines a new signer key type `SIGNER_KEY_TYPE_FUNCTION` that contains the hash of a function. An account that adds a function as a signer allows the function to execute operations authorized by the signers weight.
 
 The execution of a function requires signing weight that meets any requirements of the operations within the function, and the accounts - either literal or parameterized - referenced by those operations.
 
@@ -63,6 +61,7 @@ This patch of XDR changes is based on the XDR files in tag/commit `v15.1.0` (`90
 
 ### Semantics
 
+#### 
 
 ## Design Rationale
 
