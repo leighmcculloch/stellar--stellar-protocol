@@ -31,23 +31,23 @@ The Stellar network provides first-class support for many high-level features
 such as trading, path payments, and two-part payments (claimable balances),
 which in many financial applications removes the need for smart contracts.
 However, a lack of smart contracts slows innovation. Experimental ideas must
-be developed outside the chain, or if it is to occur on chain, significant
-effort is required to validate new first-class functionality, implement and
-test it. Adding support for logical programs creates space for
-experimentation on chain. Successful and widely used experiments can still be
-adopted as first-class features.
+be developed outside the Stellar network, or if it is to occur on network,
+significant effort is required to validate new first-class functionality,
+implement and test it, and once released is locked in indefinitely due to
+backwards compatibility guarantees. Adding support for logical programs
+creates space for experimentation on the Stellar network. Successful and
+widely used experiments can still be adopted as first-class features.
 
 ### Goals Alignment
-This CAP is aligned with the following Stellar Network Goals:
+This CAP is aligned with the following Stellar network Goals:
 
-- The Stellar Network should support participants innovating on liquidity
-solutions.
-- The Stellar Network should support participants developing new use cases.
+- The Stellar network should support the development of new use cases.
 
 ## Abstract
 
-The proposal adds a fixed number of registers to the transient state of the
-transaction application process that may be set and read by new operations.
+The proposal adds a fixed sized stack to the transient state of the
+transaction application process that may be pushed, popped, and randomly
+read.
 
 The proposal adds new operation `JumpIfOp` for skipping or repeating
 operations.
